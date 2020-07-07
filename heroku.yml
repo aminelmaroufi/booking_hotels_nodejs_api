@@ -3,10 +3,12 @@ setup:
     - plan: mongolab:sandbox
 build:
   docker:
-    web: ./Dockerfile
-    #   ports:
-    #     - '80:3000'
-    #   links:
-    #     - mongo
-    # mongo:
-    #     image: mongo
+    web: Dockerfile
+release:
+  image: web
+  #   ports:
+  #     - '80:3000'
+  #   links:
+  #     - mongo
+  # mongo:
+  #     image: mongo
