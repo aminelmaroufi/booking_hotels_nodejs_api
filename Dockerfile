@@ -3,7 +3,7 @@
 FROM node:latest
 
 ENV MONGODB_URI mongodb://mongo
-ENV NODE_ENV developmenet
+ENV NODE_ENV development
 
 # create and set app directory
 RUN mkdir -p /usr/src/app/
