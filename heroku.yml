@@ -3,7 +3,7 @@ setup:
     - plan: mongolab:sandbox
 build:
   docker:
-    web: Dockerfile
+    web: ./Dockerfile
     #   ports:
     #     - '80:3000'
     #   links:
