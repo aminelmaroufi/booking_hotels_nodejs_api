@@ -2,7 +2,7 @@
 # https://hub.docker.com/_/node/
 FROM node:latest
 
-ENV MONGODB_URI mongodb://mongo
+ENV MONGODB_URI mongodb://mongolib
 ENV NODE_ENV development
 
 # create and set app directory
