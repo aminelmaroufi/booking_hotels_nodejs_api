@@ -4,6 +4,7 @@ setup:
 build:
   docker:
     web: Dockerfile
+    context: .
 release:
   image: web
   #   ports:
