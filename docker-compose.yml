@@ -3,9 +3,42 @@ web:
   volumes:
     - .:/usr/src/app/
   ports:
-    - "8000:3000"
+    - '80:3000'
   links:
     - mongo
 
 mongo:
   image: mongo
+#   version: '3'
+
+# services:
+#   nodejs:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     image: nodejs
+#     container_name: nodejs
+#     restart: unless-stopped
+#     depends_on:
+#       - mongo
+#     networks:
+#       - app-network
+#   webserver:
+#     image: nginx:mainline-alpine
+#     container_name: webserver
+#     restart: unless-stopped
+#     ports:
+#       - '80:80'
+#     volumes:
+#       - .:/etc/nginx/nginx.template
+#       - ./nginx-conf:/etc/nginx/conf.d
+#     depends_on:
+#       - nodejs
+#     networks:
+#       - app-network
+#   mongo:
+#     image: mongo
+
+# networks:
+#   app-network:
+#     driver: bridge

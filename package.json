@@ -8,7 +8,7 @@
     "pretest": "npm run lint",
     "format:write": "prettier --write **/*.{json,md} !package.json",
     "format:test": "prettier **/*.{json,md} --list-different",
-    "start": "nodemon --inspect .",
+    "start": "nodemon .",
     "start:prod": "pm2 start ecosystem.config.js",
     "stop": "pm2 stop all",
     "restart": "pm2 restart all",

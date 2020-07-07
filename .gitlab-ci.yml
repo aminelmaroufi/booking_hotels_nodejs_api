@@ -19,7 +19,7 @@ cache:
 
 stages:
   - test
-  - deploy
+  # - deploy
 
 Run tests:
   stage: test
