@@ -8,7 +8,7 @@ ENV NODE_ENV developmenet
 # create and set app directory
 RUN mkdir -p /usr/src/app/
 WORKDIR /usr/src/app/
-RUN npm i -g nodemon
+
 # install app dependencies
 # this is done before the following COPY command to take advantage of layer caching
 COPY package.json .
@@ -16,7 +16,7 @@ RUN npm i
 
 # copy app source to destination container
 COPY . .
-
+EXPOSE 80
 CMD npm start
 
 # FROM nginx:1.17-alpine
