@@ -20,6 +20,10 @@ const express = require('express');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const { resolve, join } = require('path');
+const mongoose = require('mongoose');
+const Grid = require('gridfs-stream');
+const YAML = require('yamljs');
+const swaggerUi = require('swagger-ui-express');
 
 const MongoStore = require('connect-mongo')(session);
 const config = require('..');
@@ -29,16 +33,22 @@ const { init: initSocketIO } = require('./socket.io');
 
 const { vendor, custom } = config.files.server.modules;
 
+const swaggerDocument = YAML.load('./api/swagger/swagger.yaml');
 /**
  * Initialize local variables
  */
-module.exports.initLocalVariables = (app) => {
+module.exports.initLocalVariables = (app, db) => {
   const { locals } = app;
 
   // Setting application local variables
   if (config.secure && config.secure.ssl === true) {
     locals.secure = config.secure.ssl;
   }
+
+  /**
+   * Init the GridFS local object
+   */
+  locals.gfs = Grid(db, mongoose.mongo);
 
   // Passing the request url to environment locals
   app.use((req, res, next) => {
@@ -86,12 +96,14 @@ module.exports.initMiddleware = (app) => {
   app.enable('jsonp callback');
 
   // Should be placed before express.static
-  app.use(compress({
-    filter(req, res) {
-      return /json|text|javascript|css|font|svg/.test(res.getHeader('Content-Type'));
-    },
-    level: 9,
-  }));
+  app.use(
+    compress({
+      filter(req, res) {
+        return /json|text|javascript|css|font|svg/.test(res.getHeader('Content-Type'));
+      },
+      level: 9,
+    }),
+  );
 
   // Enable logger (morgan)
   app.use(morgan(logger.getFormat(), logger.getOptions()));
@@ -108,6 +120,9 @@ module.exports.initMiddleware = (app) => {
   app.use(bodyParser.json({ limit: '4mb', extended: true }));
   app.use(bodyParser.urlencoded({ limit: '4mb', extended: true }));
   app.use(methodOverride());
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
   // Add the cookie parser and flash middleware
   app.use(cookieParser());
   app.use(flash());
@@ -133,21 +148,23 @@ module.exports.initViewEngine = (app) => {
  */
 module.exports.initSession = (app) => {
   // Express MongoDB session storage
-  app.use(session({
-    saveUninitialized: true,
-    resave: true,
-    secret: config.sessionSecret,
-    cookie: {
-      maxAge: config.sessionCookie.maxAge,
-      httpOnly: config.sessionCookie.httpOnly,
-      secure: config.sessionCookie.secure && config.secure.ssl,
-    },
-    name: config.sessionKey,
-    store: new MongoStore({
-      collection: config.sessionCollection,
-      mongooseConnection: connection,
+  app.use(
+    session({
+      saveUninitialized: true,
+      resave: true,
+      secret: config.sessionSecret,
+      cookie: {
+        maxAge: config.sessionCookie.maxAge,
+        httpOnly: config.sessionCookie.httpOnly,
+        secure: config.sessionCookie.secure && config.secure.ssl,
+      },
+      name: config.sessionKey,
+      store: new MongoStore({
+        collection: config.sessionCollection,
+        mongooseConnection: connection,
+      }),
     }),
-  }));
+  );
 
   // Add Lusca CSRF Middleware
   // app.use(lusca(config.csrf));
@@ -169,11 +186,13 @@ module.exports.initModulesConfiguration = (app, db) => {
 module.exports.initHelmetHeaders = (app) => {
   // Use helmet to secure Express headers
   const SIX_MONTHS = 15778476000;
-  app.use(helmet({
-    maxAge: SIX_MONTHS,
-    includeSubdomains: true,
-    force: true,
-  }));
+  app.use(
+    helmet({
+      maxAge: SIX_MONTHS,
+      includeSubdomains: true,
+      force: true,
+    }),
+  );
   app.disable('x-powered-by');
 };
 
@@ -254,10 +273,7 @@ module.exports.createServer = (app) => {
  * Configure i18n
  */
 module.exports.initI18n = (app) => {
-  const lngDetector = new i18nextMiddleware.LanguageDetector(
-    null,
-    config.i18next.detector,
-  );
+  const lngDetector = new i18nextMiddleware.LanguageDetector(null, config.i18next.detector);
 
   const getDirsNames = () => {
     const modules = [vendor, ...custom];
@@ -316,7 +332,6 @@ module.exports.initErrorRoutes = (app) => {
     });
   });
 };
-
 
 /**
  * Initialize the Express application

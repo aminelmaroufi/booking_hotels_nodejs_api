@@ -1,3 +1,4 @@
+/* eslint-disable import/no-dynamic-require */
 const { resolve } = require('path');
 
 const config = require(resolve('config'));

@@ -1,4 +1,4 @@
-
+/* eslint-disable import/no-dynamic-require */
 /**
  * Module dependencies.
  */
@@ -57,7 +57,6 @@ exports.forgot = async function forgot(req, res, next) {
 
   user.resetPasswordToken = token;
   user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
-
 
   try {
     await user.save();
@@ -204,7 +203,6 @@ exports.changePassword = async function changePassword(req, res, next) {
   } catch (e) {
     return next(e);
   }
-
 
   if (!user) {
     return res.status(400).send({

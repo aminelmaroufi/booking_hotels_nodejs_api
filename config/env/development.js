@@ -1,13 +1,13 @@
 const { resolve } = require('path');
 
 module.exports = {
+  port: process.env.PORT || 3000,
   db: {
     uri:
       process.env.MONGODB_URI
       || process.env.MONGOHQ_URL
       || process.env.MONGOLAB_URI
-      || `mongodb://${process.env.DB_1_PORT_27017_TCP_ADDR
-        || 'localhost'}/app-dev`,
+      || `mongodb://${process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost'}/app-dev`,
     options: {
       auth: process.env.MONGODB_USERNAME ? { authSource: 'admin' } : undefined,
       user: process.env.MONGODB_USERNAME || '',
@@ -27,7 +27,8 @@ module.exports = {
       stream: {
         directoryPath: process.env.LOG_DIR_PATH || resolve('logs'),
         fileName: process.env.LOG_FILE || 'access.log',
-        rotatingLogs: { // for more info on rotating logs - https://github.com/holidayextras/file-stream-rotator#usage
+        rotatingLogs: {
+          // for more info on rotating logs - https://github.com/holidayextras/file-stream-rotator#usage
           active: process.env.LOG_ROTATING_ACTIVE === 'true', // activate to use rotating logs
           fileName: process.env.LOG_ROTATING_FILE || 'access-%DATE%.log', // if rotating logs are active, this fileName setting will be used
           frequency: process.env.LOG_ROTATING_FREQUENCY || 'daily',

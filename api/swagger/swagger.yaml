@@ -1,0 +1,453 @@
+openapi: 3.0.0
+info:
+  title: Sample Booking API
+  description: API Documentation in Markdown.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000/api/v1
+    variables: {}
+
+paths:
+  /auth/signin:
+    post:
+      summary: 'Sign in for users'
+      tags:
+        - Users
+      description: 'Sign in for users.'
+      operationId: 'SignInForUsers.'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/credentials'
+        required: true
+      responses:
+        '200':
+          description: Successful Login
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Profile'
+        '400':
+          description: 'Bad Request: bad query string'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: email/password not match
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      deprecated: false
+  /auth/signout:
+    post:
+      summary: 'Sign out for users'
+      tags:
+        - Users
+      description: 'Sign out for users.'
+      operationId: 'SignOutForUsers.'
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/credentials'
+        required: true
+      responses:
+        '200':
+          description: Successful Login out
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/signOutSuccess'
+        '400':
+          description: 'Bad Request: bad query string'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User is not logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /administrators/create:
+    post:
+      summary: 'Create Default Administrator.'
+      tags:
+        - Administrators
+      description: 'Api to create default admin account if does not existe'
+      parameters: []
+      operationId: 'CreateDefaultAdmin.'
+      responses:
+        '200':
+          description: Successful Created
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adminCreateSuccess'
+        '400':
+          description: Admin Already existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /administrators/hotels:
+    get:
+      summary: 'Get hotels'
+      tags:
+        - Administrators
+      description: 'Api to get all hotels by admin'
+      parameters: []
+      operationId: 'CreateHotelsList'
+      responses:
+        '200':
+          description: Success
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hotels'
+        '401':
+          description: Admin is not connected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User is not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new hotel
+      description: An API to create a new hotel from administrators
+      operationId: 'CreateNewHotel'
+      tags:
+        - Administrators
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                rating:
+                  type: number
+                main_pic:
+                  type: image
+                second_pic:
+                  type: image
+                short_address:
+                  type: string
+                address:
+                  type: string
+                location:
+                  type: string
+                type:
+                  type: string
+        required: true
+      responses:
+        '200':
+          description: Successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hotelCreateSuccess'
+        '401':
+          description: Admin is not signed in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: '[attribute] is required'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /administrators/hotels/:hotelId:
+    put:
+      summary: Update hotel
+      tags:
+        - Administrators
+      description: Update selected hotel
+      operationId: UpdateHotel
+      parameters: []
+      requestBody:
+        description: ''
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  required: true
+                rating:
+                  type: integer
+                  required: true
+                main_pic:
+                  type: image
+                  required: true
+                second_pic:
+                  type: image
+                  required: true
+                main_picture:
+                  type: string
+                  description: File id
+                  required: true
+                second_picture:
+                  type: string
+                  description: File id
+                  required: true
+                short_address:
+                  type: string
+                  required: true
+                address:
+                  type: string
+                  required: true
+                location:
+                  type: string
+                  required: true
+                type:
+                  type: string
+                  required: true
+        required: true
+      responses:
+        '200':
+          description: 'Success'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/hotelCreateSuccess'
+        '400':
+          description: Hotel id not found
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: User is not connected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User is not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete hotel
+      tags:
+        - Administrators
+      description: Delete a hotel
+      operationId: DeleteHotel
+      parameters: []
+      responses:
+        '200':
+          description: 'Success'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    default: true
+                  result:
+                    type: object
+                    properties:
+                      message:
+                        type: string
+                        default: 'Hotel deleted'
+        '400':
+          description: Hotel id not found
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Admin is not connected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: User is not authorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    credentials:
+      title: credentials
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    Profile:
+      title: Profile
+      type: object
+      properties:
+        ok:
+          type: boolean
+        result:
+          type: object
+          properties:
+            message:
+              type: string
+            data:
+              type: object
+              properties:
+                _id:
+                  type: string
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                birthday:
+                  type: string
+                address:
+                  type: string
+                city:
+                  type: string
+                zip:
+                  type: string
+                state:
+                  type: string
+                avatar:
+                  type: string
+                bio:
+                  type: string
+                roles:
+                  type: array
+                  items:
+                    type: string
+                  description: ''
+    adminCreateSuccess:
+      title: 'Create admin success'
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: true
+        result:
+          type: object
+          properties:
+            message:
+              type: string
+    signOutSuccess:
+      title: User sign out success
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: true
+        result:
+          type: object
+          properties:
+            message:
+              type: string
+    # hotelCreateSuccess:
+    #   title: Create hotel success
+    #   type: object
+    #   properties:
+    #     ok:
+    #       type: boolean
+    #       default: true
+    #     result:
+    #       type: object
+    #       properties:
+    #         message:
+    #           type: string
+    #         data:
+    #           type: object
+
+    hotelCreateSuccess:
+      title: Create hotel success
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: true
+        result:
+          type: object
+          properties:
+            message:
+              type: string
+              default: 'Hotel created'
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Hotel'
+              description: ''
+
+    Hotel:
+      title: Hotel
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        rating:
+          type: number
+        main_picture:
+          type: string
+        second_picture:
+          type: string
+        short_address:
+          type: string
+        address:
+          type: string
+        location:
+          type: string
+        created_at:
+          type: string
+        updated_at:
+          type: string
+
+    Error:
+      title: Error
+      type: object
+      properties:
+        ok:
+          type: boolean
+          default: false
+        result:
+          type: object
+          properties:
+            message:
+              type: string
+            data:
+              type: object

@@ -2,7 +2,8 @@ const { resolve } = require('path');
 
 module.exports = {
   log: {
-    format: ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
+    format:
+      ':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"',
   },
   db: {
     promise: global.Promise,
@@ -13,6 +14,18 @@ module.exports = {
         createdAt: 'created_at',
         updatedAt: 'updated_at',
       },
+    },
+  },
+  uploads: {
+    uploader: {
+      limits: {
+        fileSize: 52428800, // Max file size in bytes (50 MB)
+      },
+      thumbnail: {
+        width: 100,
+        height: 100,
+      },
+      accept: ['image/png', 'image/jpeg'],
     },
   },
   i18next: {

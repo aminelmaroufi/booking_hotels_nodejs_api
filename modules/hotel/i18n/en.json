@@ -1,0 +1,20 @@
+{
+  "IS_OK": "The module <b>administrators</b> is up and running.",
+  "PAGE_NOT_FOUND": "Page not found.",
+  "ERROR_ON_SERVER": "Error on Server.",
+  "ADMIN_ALREADY_EXIST": "Account already exists.",
+  "ADMIN_CREATED": "Account created successfully.",
+  "BARBER_NOT_FOUND": "Barber not found.",
+  "BARBER_ALREADY_APPROVED": "Request of {{name}} have been already approved.",
+  "BARBER_ACTION_SUCCESS": "Account {{name}} {{action}} successfully.",
+  "BARBER_ALREADY_REJECTED": "Request of {{name}} have been already rejected.",
+  "CUSTOMER_NOT_FOUND": "Customer not found.",
+  "CUSTOMER_ALREADY_ACHIVED": "Customer {{name}} have been already deleted.",
+  "CUSTOMER_ACTION_SUCCESS": "Account {{name}} has {{action}} successfully.",
+  "DOCUMENT_NOT_FOUND": "Document not found",
+  "ACCOUNT_CREATION_SUCCESSFUL": "Account was created successfully.",
+  "EMAIL_ALREADY_EXISTS": "Email address already exists.",
+  "ADMIN_NOT_FOUND": "Admint account not found.",
+  "ACCOUNT_DELETED_SUCCESS": "Account was deleted successfully.",
+  "VARIABLES_UPDATED": "settings updated successfully"
+}

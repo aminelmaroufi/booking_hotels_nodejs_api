@@ -1,4 +1,3 @@
-
 const nunjucks = require('nunjucks');
 const path = require('path');
 const generatePassword = require('generate-password');
@@ -43,7 +42,6 @@ exports.notify = (user, validation, req) => {
   url += '/auth/confirm?type=email';
   url += `&uid=${userId}`;
   url += `&code=${validation.code}`;
-
 
   user.sendMail('Email validation', nunjucks.render(tpl, {
     name: user.name.full,

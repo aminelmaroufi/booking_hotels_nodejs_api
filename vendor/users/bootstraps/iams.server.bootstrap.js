@@ -1,3 +1,5 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable import/no-unresolved */
 const { resolve } = require('path');
 const { model } = require('mongoose');
 const { promisify } = require('util');

@@ -1,0 +1,8 @@
+{% extends 'layout.server.view.swig' %}
+
+{% block content %}
+<h1>Server Error</h1>
+<pre>
+  {{error}}
+</pre>
+{% endblock %}

@@ -3,7 +3,7 @@
 FROM node:latest
 
 ENV MONGODB_URI mongodb://mongolib
-ENV NODE_ENV development
+ENV NODE_ENV=development
 
 # create and set app directory
 RUN mkdir -p /usr/src/app/
@@ -17,7 +17,7 @@ RUN npm i
 # copy app source to destination container
 COPY . .
 EXPOSE 80
-CMD npm start
+CMD [ "npm", "start" ]
 
 # FROM nginx:1.17-alpine
 # RUN apk --no-cache add curl

@@ -2,7 +2,6 @@
  * Guest role
  * @type {Array}
  */
-// eslint-disable-next-line
 
 const guest = [
   'users:profile:get',
@@ -14,7 +13,10 @@ const guest = [
   'users:auth:code:confirm',
   'users:auth:code:resend',
   'users:auth:name',
-  'bookings:search',
+  'administrators:create',
+  'users:hotels:get',
+  'files:meta:get',
+  'files:view',
 ];
 
 /**
@@ -46,6 +48,11 @@ const admin = [
   'users:admin:update',
   'users:admin:delete',
   'users:admin:picture',
+  'hotels:create',
+  'hotels:list',
+  'hotel:update',
+  'hotels:delete',
+  'rooms:create',
 ];
 
 /**

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-dynamic-require */
 const chalk = require('chalk');
 const { resolve } = require('path');
 const express = require('express');
@@ -88,11 +89,11 @@ module.exports = (app) => {
     if (Array.isArray(m.routes)) {
       m.routes.forEach((route) => {
         if (
-          !route ||
-          typeof route !== 'object' ||
-          !route.methods ||
-          typeof route.methods !== 'object' ||
-          !route.path
+          !route
+          || typeof route !== 'object'
+          || !route.methods
+          || typeof route.methods !== 'object'
+          || !route.path
         ) {
           console.warn('Invalid route', route);
           return;
@@ -118,11 +119,11 @@ module.exports = (app) => {
         // Scan the routes
         Object.keys(route.methods).forEach(async (k) => {
           if (
-            typeof routeTmp[k] === 'function' &&
-            Object.prototype.hasOwnProperty.call(route.methods, k) &&
-            route.methods[k] &&
-            typeof route.methods[k] === 'object' &&
-            route.methods[k].middlewares
+            typeof routeTmp[k] === 'function'
+            && Object.prototype.hasOwnProperty.call(route.methods, k)
+            && route.methods[k]
+            && typeof route.methods[k] === 'object'
+            && route.methods[k].middlewares
           ) {
             const method = route.methods[k];
 

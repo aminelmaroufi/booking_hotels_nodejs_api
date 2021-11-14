@@ -1,0 +1,9 @@
+{
+  "IS_OK": "The module <b>administrators</b> is up and running.",
+  "PAGE_NOT_FOUND": "Page not found.",
+  "ERROR_ON_SERVER": "Error on Server.",
+  "ADMIN_ALREADY_EXIST": "Account already exists.",
+  "ADMIN_CREATED": "Account created successfully.",
+  "Hotel Created": "Hotel Created Successfully",
+  "HOTEL_DELETED": "Hotel Deleted Successfully"
+}

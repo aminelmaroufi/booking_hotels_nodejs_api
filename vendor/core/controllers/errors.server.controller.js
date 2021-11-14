@@ -1,4 +1,3 @@
-
 /**
  * Get unique error field name
  * @param {Express.Request} req The request

@@ -1,15 +1,8 @@
-// This config file contains Mocha's defaults.
-// As you can see, comments are allowed.
-// This same configuration could be provided in the `mocha` property of your
-// project's `package.json`.
 {
-  "diff": true,
-  "extension": ["js"],
-  "package": "./package.json",
-  "reporter": "spec",
-  "slow": 75,
-  "timeout": 2000,
-  "ui": "bdd",
-  "watch-files": ["modules/**/tests/**/*.js"],
-  "watch-ignore": ["lib/vendor", "vendor"]
+  "type": "node",
+  "request": "launch",
+  "name": "Mocha Tests",
+  "program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+  "args": ["${workspaceFolder}/test/**/*.js", "${workspaceFolder}/modules/**/tests/**/*.js"],
+  "internalConsoleOptions": "openOnSessionStart"
 }

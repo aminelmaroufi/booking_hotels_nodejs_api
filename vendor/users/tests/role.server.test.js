@@ -1,3 +1,4 @@
+/* eslint-disable import/no-dynamic-require */
 /* eslint-env node, mocha */
 const request = require('supertest');
 const { resolve } = require('path');
@@ -11,7 +12,6 @@ const {
   describe,
   afterEach,
 } = require('mocha');
-
 
 const { prefix } = require(resolve('config'));
 

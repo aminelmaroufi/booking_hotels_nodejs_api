@@ -52,11 +52,7 @@ if (config.sendGrid && config.sendGrid.key && config.sendGrid.key !== 'SENDGRID_
 
 let smtpTransport;
 
-if (
-  config.mailer.options
-  && config.mailer.options.auth
-  && config.mailer.options.auth.pass
-) {
+if (config.mailer.options && config.mailer.options.auth && config.mailer.options.auth.pass) {
   smtpTransport = nodemailer.createTransport(config.mailer.options);
 }
 
@@ -138,19 +134,17 @@ const validateRole = async (name) => {
  */
 const UserSchema = new Schema(
   {
-    name: {
-      first: {
-        type: String,
-        trim: true,
-        default: '',
-        validate: [validateLocalStrategyProperty, 'Please fill in your first name'],
-      },
-      last: {
-        type: String,
-        trim: true,
-        default: '',
-        validate: [validateLocalStrategyProperty, 'Please fill in your last name'],
-      },
+    firstName: {
+      type: String,
+      trim: true,
+      default: '',
+      validate: [validateLocalStrategyProperty, 'Please fill in your first name'],
+    },
+    lastName: {
+      type: String,
+      trim: true,
+      default: '',
+      validate: [validateLocalStrategyProperty, 'Please fill in your last name'],
     },
     email: {
       type: String,
@@ -249,21 +243,21 @@ UserSchema.virtual('profilePictureUrl').get(function get_picture_url() {
   return `${config.prefix}/users/${this.id}/picture`;
 });
 
-UserSchema.virtual('name.full').get(function get_fullname() {
+UserSchema.virtual('fullName').get(function get_fullname() {
   let result = '';
-  if (this.name.first) {
-    result += this.name.first
+  if (this.firstName) {
+    result += this.firstName
       .split(' ')
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
       .join(' ');
   }
 
-  if (this.name.last) {
+  if (this.lastName) {
     if (result) {
       result += ' ';
     }
 
-    result += this.name.last.toUpperCase();
+    result += this.lastName.toUpperCase();
   }
 
   return result;
@@ -346,7 +340,11 @@ UserSchema.methods.sendMail = function send_mail(subject, body) {
  */
 UserSchema.query.sendMail = async function send_mail_col(subject, body) {
   const users = await this;
-  return sendMail(subject, body, users.map((u) => u.email));
+  return sendMail(
+    subject,
+    body,
+    users.map((u) => u.email),
+  );
 };
 
 /**

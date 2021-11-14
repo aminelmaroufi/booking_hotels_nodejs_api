@@ -1,7 +1,21 @@
+// module.exports = {
+//   extends: '../../.eslintrc.json',
+//   globals: {},
+//   rules: {
+//     'import/no-extraneous-dependencies': 'off',
+//   },
+// };
 module.exports = {
-  extends: '../../.eslintrc.json',
+  extends: 'airbnb-base',
   globals: {},
   rules: {
-    'import/no-extraneous-dependencies': 'off',
+    indent: 2,
+    'no-console': ['error', { allow: ['warn', 'error', 'info'] }],
+    'linebreak-style': ['error', 'unix'],
+    quotes: [2, 'single'],
+    camelcase: 'off',
+  },
+  env: {
+    mocha: true,
   },
 };

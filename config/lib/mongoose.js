@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 /**
  * Module dependencies.
  */
@@ -23,9 +25,9 @@ module.exports.connect = (callback) => {
   mongoose
     .connect(config.db.uri, {
       ...config.db.options,
+      useUnifiedTopology: true,
       autoIndex: false,
       useFindAndModify: false,
-      useUnifiedTopology: true,
     })
     .then(() => {
       // Enabling mongoose debug mode if required
@@ -42,10 +44,7 @@ module.exports.connect = (callback) => {
 
 process.on('uncaughtException', (err) => {
   console.error(err);
-  if (
-    err.name === 'MongoError'
-    && err.codeName === 'DuplicateKey'
-  ) {
+  if (err.name === 'MongoError' && err.codeName === 'DuplicateKey') {
     // Do nothing
   } else {
     process.exit(0);
@@ -53,22 +52,18 @@ process.on('uncaughtException', (err) => {
 });
 
 module.exports.disconnect = (cb) => {
-  mongoose.connection
-    .close((err) => {
-      console.info(chalk.yellow('Disconnected from MongoDB.'));
-      return cb(err);
-    });
+  mongoose.connection.close((err) => {
+    console.info(chalk.yellow('Disconnected from MongoDB.'));
+    return cb(err);
+  });
 };
 
 /**
  * @returns {{ value: T[]; top: number; skip: number; count: number }}
  */
-mongoose.Query.prototype.paginate = async function paginate({
-  top = 10,
-  skip = 0,
-}) {
-  const t = isNaN(top) ? 10 : parseInt(top, 10);
-  const s = isNaN(skip) ? 10 : parseInt(skip, 10);
+mongoose.Query.prototype.paginate = async function paginate({ top = 10, skip = 0 }) {
+  const t = Number.isNaN(top) ? 10 : parseInt(top, 10);
+  const s = Number.isNaN(skip) ? 10 : parseInt(skip, 10);
 
   if (t >= 0) {
     this.limit(t);

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-dynamic-require */
 /* eslint-env node, mocha */
 
 const should = require('should');

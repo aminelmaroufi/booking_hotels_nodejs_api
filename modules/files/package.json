@@ -1,0 +1,13 @@
+{
+  "name": "files",
+  "version": "0.1.0",
+  "description": "The files module",
+  "keywords": [
+    "PS",
+    "module",
+    "wakanda",
+    "functional",
+    "files"
+  ],
+  "license": "ISC"
+}

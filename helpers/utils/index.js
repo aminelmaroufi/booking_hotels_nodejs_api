@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-dynamic-require */
 const Ajv = require('ajv');
 const { model } = require('mongoose');
 const debug = require('debug')('boilerplate:helpers:utils');
@@ -5,6 +7,7 @@ const { resolve } = require('path');
 const { readFile } = require('fs');
 const { promisify } = require('util');
 const ajvErrors = require('ajv-errors');
+
 const sockets = require(resolve('config/lib/socket.io'));
 
 const roleCache = {};

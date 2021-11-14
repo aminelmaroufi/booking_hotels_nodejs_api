@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 const redisAdapter = require('socket.io-redis');
 const cookieParser = require('cookie-parser');
 const { connection } = require('mongoose');

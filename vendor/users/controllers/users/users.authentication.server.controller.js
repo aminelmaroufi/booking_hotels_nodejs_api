@@ -1,4 +1,5 @@
-
+/* eslint-disable max-len */
+/* eslint-disable import/no-dynamic-require */
 /**
  * Module dependencies.
  */
@@ -7,16 +8,13 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 
 const User = mongoose.model('User');
-const errorHandler = require('core/controllers/errors.server.controller');
+const errorHandler = require('../../../core/controllers/errors.server.controller');
 
 const validationsHelper = require(resolve('./config/validations'));
-const config = require(resolve('config'));
+// const config = require(resolve('config'));
 
 // URLs for which user can't be redirected on signin
-const noReturnUrls = [
-  '/authentication/signin',
-  '/authentication/signup',
-];
+const noReturnUrls = ['/authentication/signin', '/authentication/signup'];
 
 /**
  * Signup
@@ -32,7 +30,7 @@ exports.signup = async function signup(req, res, next) {
   const user = new User(b);
   const { hooks } = validationsHelper;
 
-  await (hooks.onInit(user));
+  await hooks.onInit(user);
 
   // Add missing user fields
   user.provider = 'local';
@@ -69,7 +67,7 @@ exports.signup = async function signup(req, res, next) {
  */
 exports.signin = async function signin(req, res, next) {
   // eslint-disable-next-line
-  passport.authenticate("local", (err, user, info) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err || !user) {
       return res.status(401).json({
         ok: false,
@@ -108,7 +106,13 @@ exports.signin = async function signin(req, res, next) {
  */
 exports.signout = async function signout(req, res) {
   req.logout();
-  res.redirect(config.app.pages.login || '/');
+
+  return res.json({
+    ok: true,
+    result: {
+      message: req.t('SUCCESSFUL SIGNOUT'),
+    },
+  });
 };
 
 /**
@@ -137,7 +141,9 @@ exports.oauthCallback = (strategy) => async function oauthCall(req, res, next) {
 
   passport.authenticate(strategy, (err, user, redirectURL) => {
     if (err) {
-      return res.redirect(`/authentication/signin?err=${encodeURIComponent(errorHandler.getErrorMessage(err))}`);
+      return res.redirect(
+        `/authentication/signin?err=${encodeURIComponent(errorHandler.getErrorMessage(err))}`,
+      );
     }
 
     if (!user) {
@@ -169,9 +175,7 @@ exports.saveOAuthUserProfile = (req, providerUserProfile, done) => {
     // Define main provider search query
     const msq = {};
     msq.provider = providerUserProfile.provider;
-    msq[smpif] = providerUserProfile.providerData[
-      providerUserProfile.providerIdentifierField
-    ];
+    msq[smpif] = providerUserProfile.providerData[providerUserProfile.providerIdentifierField];
 
     // Define additional provider search query
     const apsq = {};
@@ -188,7 +192,8 @@ exports.saveOAuthUserProfile = (req, providerUserProfile, done) => {
       }
 
       if (!user) {
-        const possibleUsername = providerUserProfile.username || ((providerUserProfile.email) ? providerUserProfile.email.split('@')[0] : '');
+        const possibleUsername = providerUserProfile.username
+          || (providerUserProfile.email ? providerUserProfile.email.split('@')[0] : '');
 
         return User.findUniqueUsername(possibleUsername, null, () => {
           const userTmp = new User({
@@ -226,9 +231,7 @@ exports.saveOAuthUserProfile = (req, providerUserProfile, done) => {
         userTmp.additionalProvidersData = {};
       }
 
-      userTmp.additionalProvidersData[
-        providerUserProfile.provider
-      ] = providerUserProfile.providerData;
+      userTmp.additionalProvidersData[providerUserProfile.provider] = providerUserProfile.providerData;
 
       // Then tell mongoose that we've updated the additionalProvidersData field
       userTmp.markModified('additionalProvidersData');
@@ -250,18 +253,15 @@ exports.saveOAuthUserProfile = (req, providerUserProfile, done) => {
  * @param {Function} next Go to the next middleware
  */
 exports.removeOAuthProvider = async function removeOAuthProvider(req, res) {
-  const {
-    user,
-  } = req;
-  const {
-    provider,
-  } = req.query;
+  const { user } = req;
+  const { provider } = req.query;
 
   if (!user) {
     return res.status(401).json({
       message: req.t('USER_NOT_LOGGEDIN'),
     });
-  } if (!provider) {
+  }
+  if (!provider) {
     return res.status(400).send();
   }
 
@@ -284,9 +284,11 @@ exports.removeOAuthProvider = async function removeOAuthProvider(req, res) {
         return res.status(400).send(err_);
       }
 
-      return res.json(user.toJSON({
-        virtuals: true,
-      }));
+      return res.json(
+        user.toJSON({
+          virtuals: true,
+        }),
+      );
     });
   });
 };
